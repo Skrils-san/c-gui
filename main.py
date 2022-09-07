@@ -226,7 +226,7 @@ collection_lable.grid(row=3, column=0, padx=0, pady=0, sticky="nsew")
 made_lable = Label(text="Made by Skrils-san", cursor="hand2")
 made_lable.grid(row=2, column=0, padx=4, pady=0, sticky="e")
 made_lable.bind("<Button-1>", lambda e: callback("https://github.com/Skrils-san"))
-
+#
 ############################ Entrys ############################
 input_path_entry = ttk.Entry(check_frame, width=97, state="readonly")
 input_path_entry.insert(0, "")
