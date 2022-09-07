@@ -3,7 +3,7 @@ from tkinter import *
 from tkinter import ttk, filedialog, messagebox
 from tkinter.colorchooser import askcolor
 from PIL import Image, ImageDraw, ImageFont
-import cv2, os
+import cv2, os, webbrowser
 
 ############################ Variables ############################
 root = Tk()
@@ -103,6 +103,9 @@ def click_event(event, x, y, flags, params):
         y_cord_data_lable.configure(text=y_cord)
         cv2.destroyAllWindows()
 
+def callback(url):
+    webbrowser.open_new(url)
+
 def validate(P):                                                   # max length for entry widget
     if len(P) <= 0:
         # empty Entry is ok
@@ -125,7 +128,7 @@ def output_file():
 ############################ Window settings ############################
 root.title("Image GUI")
 root.iconbitmap("./bin/icon.ico")
-root.geometry("885x670")
+root.geometry("885x685")
 root.resizable(width=False, height=False)
 
 ############################ Settings settings ############################
@@ -133,7 +136,7 @@ def clicker() :
     global pop
     pop = Toplevel(root)
     pop.title("Settings")
-    pop.geometry("250x150")
+    pop.geometry("250x250")
 
     theme_frame = ttk.LabelFrame(pop, text="UI Theme", padding=(20, 10))
     theme_frame.grid(row=1, column=0, padx=(5, 5), pady=(5, 5), sticky="nsew")
@@ -220,6 +223,10 @@ name_quantity_number_lable.grid(row=0, column=1, padx=5, pady=10, sticky="nsew")
 collection_lable = Label(collection_frame, text="(output: name-collection_name.png)")
 collection_lable.grid(row=3, column=0, padx=0, pady=0, sticky="nsew")
 
+made_lable = Label(text="Made by Skrils-san", cursor="hand2")
+made_lable.grid(row=2, column=0, padx=4, pady=0, sticky="e")
+made_lable.bind("<Button-1>", lambda e: callback("https://github.com/Skrils-san"))
+
 ############################ Entrys ############################
 input_path_entry = ttk.Entry(check_frame, width=97, state="readonly")
 input_path_entry.insert(0, "")
@@ -240,6 +247,9 @@ output_path_entry.grid(row=3, column=1, padx=5, pady=10, sticky="nsew")
 collection_entry = ttk.Entry(collection_frame, width=40)
 collection_entry.insert(0, "")
 collection_entry.grid(row=0, column=0, padx=5, pady=5, sticky="nsew")
+
+style = ttk.Style()
+style.map('TEntry', lightcolor=[('focus', 'red')])
 
 ############################ Buttons ############################
 browse_pic_button = ttk.Button(check_frame, text="Browse", command=browse_input)
