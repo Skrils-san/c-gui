@@ -1,0 +1,1 @@
+*.png .blp .bmp .dds .dib .eps .icns .im .jpeg2000 .ppm .sgi .spider .ico .jpeg .jpg .msp .pcx .gif .tga .tiff .webP .XBM
