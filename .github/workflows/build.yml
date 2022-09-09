@@ -47,5 +47,5 @@ jobs:
         with:
           upload_url: ${{steps.create_release.outputs.upload_url}}
           asset_path: dist/c-gui.exe
-          asset_name: c-gui-Windows-amd64.exe
+          asset_name: c-gui-Windows.exe
           asset_content_type: application/zip

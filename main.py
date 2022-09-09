@@ -4,6 +4,7 @@ from tkinter import ttk, filedialog, messagebox
 from tkinter.colorchooser import askcolor
 from PIL import Image, ImageDraw, ImageFont
 import cv2, os, webbrowser, sys
+import numpy, PyInstaller # Dependencis #
 
 ############################ Variables ############################
 root = Tk()
@@ -146,16 +147,37 @@ def output_file():
 ############################ Window settings ############################
 root.title("Image GUI")
 root.iconbitmap(resource_path("./bin/icon.ico"))
-root.geometry("885x685")
+#root.geometry("885x685")
 root.resizable(width=False, height=False)
 
+width = 885 # Width 
+height = 685 # Height
+screen_width = root.winfo_screenwidth()  # Width of the screen
+screen_height = root.winfo_screenheight() # Height of the screen
+# Calculate Starting X and Y coordinates for Window
+x = (screen_width/2) - (width/2)
+y = (screen_height/2) - (height/2)
+
 ############################ Settings settings ############################
+def pop_destroy():
+    pop.destroy()
+
 def clicker() :
     global pop
     pop = Toplevel(root)
     pop.title("Settings")
     pop.iconbitmap(resource_path("./bin/icon.ico"))
-    pop.geometry("300x100")
+
+    width = 300 # Width 
+    height = 140 # Height
+    screen_width = root.winfo_screenwidth()  # Width of the screen
+    screen_height = root.winfo_screenheight() # Height of the screen
+    # Calculate Starting X and Y coordinates for Window
+    x = (screen_width/2) - (width/2)
+    y = (screen_height/2) - (height/2)
+
+    pop.geometry('%dx%d+%d+%d' % (width, height, x, y))
+    pop.grab_set()
 
     theme_frame = ttk.LabelFrame(pop, text="UI Theme", padding=(20, 10))
     theme_frame.grid(row=0, column=1, padx=(5, 5), pady=(5, 5), sticky="nsew")
@@ -166,9 +188,12 @@ def clicker() :
     pop_frame = ttk.LabelFrame(pop, text="Font", padding=(20, 10))
     pop_frame.grid(row=0, column=0, padx=(5, 5), pady=(5, 5), sticky="nsew")
     
-    pop_label = Label(pop_frame, cursor="hand2", foreground="#007FFF", text="Website for .ttf files")
+    pop_label = ttk.Label(pop_frame, cursor="hand2", foreground="#007FFF", text="Website for .ttf files")
     pop_label.grid(row=0, column=0, padx=(5, 5), pady=(5, 5), sticky="nsew")
     pop_label.bind("<Button-1>", lambda e: callback("https://www.1001fonts.com/"))
+
+    ok_button = ttk.Button(pop, text="Ok", command=pop_destroy, width="11", style="Accent.TButton")
+    ok_button.grid(row=1, column=1, padx=(5, 5), pady=(5, 5), sticky="e")
 
 ############################ Frame ############################
 check_frame = ttk.LabelFrame(root, text="Input/Output Settings", padding=(20, 10))
@@ -189,14 +214,14 @@ rotation_frame.grid(row=0, column=4, padx=(5, 5), pady=(5, 5), sticky="nsew")
 collection_frame = ttk.LabelFrame(general_frame, text="Collection name", padding=(20, 10))
 collection_frame.grid(row=1, column=0, columnspan=2, padx=(5, 5), pady=(5, 5), sticky="nsew")
 
-names_frame = ttk.LabelFrame(general_frame, text="Names Quantity", padding=(20, 10))
-names_frame.grid(row=1, column=2, padx=(5, 5), pady=(5, 5), sticky="nsew")
-
 size_frame = ttk.LabelFrame(general_frame, text="Font size", padding=(20, 10))
-size_frame.grid(row=2, column=2, padx=(5, 5), pady=(5, 5), sticky="nsew")
+size_frame.grid(row=1, column=2, padx=(5, 5), pady=(5, 5), sticky="nsew")
 
 extension_frame = ttk.LabelFrame(general_frame, text="Output extension", padding=(20, 10))
-extension_frame.grid(row=2, column=3, padx=(5, 5), pady=(5, 5), sticky="nsew")
+extension_frame.grid(row=1, column=3, padx=(5, 5), pady=(5, 5), sticky="nsew")
+
+names_frame = ttk.LabelFrame(general_frame, text="Names Quantity", padding=(20, 10))
+names_frame.grid(row=2, column=3, padx=(5, 5), pady=(5, 5), sticky="nsew")
 
 ############################ Label ############################
 input_lable = Label(check_frame, text="Input file")
@@ -292,7 +317,7 @@ cord_button = ttk.Button(cords_frame, text="Choose cord", command=driver_event)
 cord_button.grid(row=0, column=2, rowspan=2, padx=5, pady=10, sticky="nsew")
 
 settings_button = ttk.Button(general_frame, text="Settings", command=clicker)
-settings_button.grid(row=2, column=0, padx=5, pady=10, sticky="nsew")
+settings_button.grid(row=2, column=0, padx=5, pady=10, sticky="nsew", columnspan=3)
 
 ############################ Spinbox ############################
 
@@ -320,4 +345,5 @@ root.tk.call("set_theme", "dark")
 
 ############################ GUI Start ############################
 if __name__ == "__main__" :
+    root.geometry('%dx%d+%d+%d' % (width, height, x, y))
     root.mainloop()
