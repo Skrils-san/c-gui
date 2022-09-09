@@ -4,7 +4,7 @@ from tkinter import ttk, filedialog, messagebox
 from tkinter.colorchooser import askcolor
 from PIL import Image, ImageDraw, ImageFont
 import cv2, os, webbrowser, sys
-import numpy, PyInstaller # Dependencis #
+import PyInstaller # Dependencis #
 
 ############################ Variables ############################
 root = Tk()
