@@ -1,6 +1,8 @@
 dev-scripts/
 output/
 __pycache__/
+.vscode/
+tasks/
 ACIDL___.TTF
 Ubuntu-B.ttf
 100-names.txt

@@ -3,7 +3,7 @@ from tkinter import *
 from tkinter import ttk, filedialog, messagebox
 from tkinter.colorchooser import askcolor
 from PIL import Image, ImageDraw, ImageFont
-import cv2, os, webbrowser
+import cv2, os, webbrowser, sys
 
 ############################ Variables ############################
 root = Tk()
@@ -13,21 +13,36 @@ font_size = IntVar()
 rotation_angle = IntVar()
 output_extension_file = ".png", ".jpg", ".jpeg", ".blp", ".bmp", ".dds", ".dib", ".eps", ".icns", ".im", ".jpeg2000", ".ppm", ".sgi", ".spider", ".ico", ".msp", ".pcx", ".gif", ".tga", ".tiff", ".webP", ".XBM"
 ############################ Functions ############################
+def resource_path(relative_path):
+        #""" Get the absolute path to the resource, works for dev and for PyInstaller """
+    try:
+        # PyInstaller creates a temp folder and stores path in _MEIPASS
+        base_path = sys._MEIPASS
+    except Exception:
+        base_path = os.path.abspath(".")
+
+    return os.path.join(base_path, relative_path)
+
 def browse_input():
+    input_path_entry.config(state="write")
     global input_path
-    with open("./bin/input_extensions.txt",mode = "r") as ip:
+    with open(resource_path("./bin/input_extensions.txt"),mode = "r") as ip:
         input_extension_file = ip.read()
     input_path = filedialog.askopenfilename(filetypes=[("Picture files", input_extension_file)])
     input_path_entry.delete(0, "")
     input_path_entry.insert(0, input_path)
+    input_path_entry.config(state="readonly")
 
 def browse_output():
+    output_path_entry.config(state="write")
     global output_path
     output_path = filedialog.askdirectory()+"/"
     output_path_entry.delete(0, "")
     output_path_entry.insert(0, output_path)
+    output_path_entry.config(state="readonly")
 
 def browse_names():
+    names_path_entry.config(state="write")
     global names_path
     names_path = filedialog.askopenfilename(filetypes=[("Text files", "*.txt")])
     names_path_entry.delete(0, "")
@@ -36,12 +51,15 @@ def browse_names():
         global names
         names = fo.read().splitlines()
     name_quantity_number_lable.configure(text=len(names))
+    names_path_entry.config(state="readonly")
 
 def browse_font():
+    font_entry.config(state="write")
     global font_path
     font_path = filedialog.askopenfilename(filetypes=[("Font files", "*.ttf")])
     font_entry.delete(0, "")
     font_entry.insert(0, font_path)
+    font_entry.config(state="readonly")
 
 def build_pictures():
     font = ImageFont.truetype(font_path, font_size.get())
@@ -120,14 +138,14 @@ def validate(P):                                                   # max length 
 vcmd = (root.register(validate), '%P')
 
 def output_file():
-    with open("./bin/output_extensions.txt",mode = "r") as ip:
+    with open(resource_path("./bin/output_extensions.txt"),mode = "r") as ip:
         global output_extension_file
         output_extension_file = ip.read()
     
 
 ############################ Window settings ############################
 root.title("Image GUI")
-root.iconbitmap("./bin/icon.ico")
+root.iconbitmap(resource_path("./bin/icon.ico"))
 root.geometry("885x685")
 root.resizable(width=False, height=False)
 
@@ -136,21 +154,21 @@ def clicker() :
     global pop
     pop = Toplevel(root)
     pop.title("Settings")
-    pop.geometry("250x250")
+    pop.iconbitmap(resource_path("./bin/icon.ico"))
+    pop.geometry("300x100")
 
     theme_frame = ttk.LabelFrame(pop, text="UI Theme", padding=(20, 10))
-    theme_frame.grid(row=1, column=0, padx=(5, 5), pady=(5, 5), sticky="nsew")
-
-    pop_frame = ttk.LabelFrame(pop, text="GUI Settings", padding=(20, 10))
-    pop_frame.grid(row=0, column=0, padx=(5, 5), pady=(5, 5), sticky="nsew")
-    
-    pop_label = Label(pop_frame, text="Would You")
-    pop_label.grid(row=0, column=0, padx=(5, 5), pady=(5, 5), sticky="nsew")
+    theme_frame.grid(row=0, column=1, padx=(5, 5), pady=(5, 5), sticky="nsew")
 
     theme_switch = ttk.Checkbutton(theme_frame, style="Switch.TCheckbutton", onvalue=0, offvalue=1, variable=ui_theme, command=ui_theme_func)
     theme_switch.grid(row=0, column=0, padx=5, pady=10, sticky="nsew")
 
+    pop_frame = ttk.LabelFrame(pop, text="Font", padding=(20, 10))
+    pop_frame.grid(row=0, column=0, padx=(5, 5), pady=(5, 5), sticky="nsew")
     
+    pop_label = Label(pop_frame, cursor="hand2", foreground="#007FFF", text="Website for .ttf files")
+    pop_label.grid(row=0, column=0, padx=(5, 5), pady=(5, 5), sticky="nsew")
+    pop_label.bind("<Button-1>", lambda e: callback("https://www.1001fonts.com/"))
 
 ############################ Frame ############################
 check_frame = ttk.LabelFrame(root, text="Input/Output Settings", padding=(20, 10))
@@ -226,7 +244,7 @@ collection_lable.grid(row=3, column=0, padx=0, pady=0, sticky="nsew")
 made_lable = Label(text="Made by Skrils-san", cursor="hand2")
 made_lable.grid(row=2, column=0, padx=4, pady=0, sticky="e")
 made_lable.bind("<Button-1>", lambda e: callback("https://github.com/Skrils-san"))
-#
+
 ############################ Entrys ############################
 input_path_entry = ttk.Entry(check_frame, width=97, state="readonly")
 input_path_entry.insert(0, "")
@@ -247,9 +265,6 @@ output_path_entry.grid(row=3, column=1, padx=5, pady=10, sticky="nsew")
 collection_entry = ttk.Entry(collection_frame, width=40)
 collection_entry.insert(0, "")
 collection_entry.grid(row=0, column=0, padx=5, pady=5, sticky="nsew")
-
-style = ttk.Style()
-style.map('TEntry', lightcolor=[('focus', 'red')])
 
 ############################ Buttons ############################
 browse_pic_button = ttk.Button(check_frame, text="Browse", command=browse_input)
@@ -300,7 +315,7 @@ file_extension.current(0)
 
 
 ############################ Theme ############################
-root.call("source", "./bin/azure.tcl")
+root.call("source", resource_path("./bin/azure.tcl"))
 root.tk.call("set_theme", "dark")
 
 ############################ GUI Start ############################
