@@ -1,4 +1,4 @@
-############################ Modules ############################
+############################ Modules #############################
 from tkinter import *
 from tkinter import ttk, filedialog, messagebox
 from tkinter.colorchooser import askcolor
